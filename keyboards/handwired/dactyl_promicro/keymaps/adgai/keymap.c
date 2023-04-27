@@ -14,6 +14,8 @@
 #define ENT LSFT_T(KC_ENT)
 #define SPC LALT_T(KC_SPC)
 #define S_TAB S(KC_TAB)
+#define CS_TAB LCTL(LSFT(KC_TAB))
+#define C_TAB LCTL(KC_TAB)
 #define CTRL LCTL_T(KC_ESC)
 #define GUI LGUI_T(KC_BSPC)
 #define L2_BSPC LCTL(KC_BSPC)
@@ -78,8 +80,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_COLN,KC_EXLM,KC_AT  ,KC_LBRC,KC_RBRC,KC_PIPE,                                       KC_EQL  ,KC_7  ,KC_8  ,KC_9  ,KC_ASTR,KC_F12 ,
         KC_UNDS,KC_HASH,KC_DLR ,KC_LPRN,KC_RPRN,KC_GRV ,                                       KC_BSLS,KC_4  ,KC_5  ,KC_6  ,KC_PLUS,KC_UNDS,
         _______,KC_PERC,KC_CIRC,KC_LCBR,KC_RCBR,KC_TILD,                                       KC_AMPR,KC_1  ,KC_2  ,KC_3  ,KC_0,KC_SLSH,
-        QK_BOOT  ,_______,_______,_______,KC_LCTL,_______,                                       _______,KC_MINS,KC_DOT,KC_0  ,KC_EQL,_______,
-                                                _______,_______,_______,       KC_LGUI,_______,S_GUI,
+        QK_BOOT  ,_______,C_TAB,KC_TAB,S_TAB,_______,                                       _______,KC_MINS,KC_DOT,KC_0  ,KC_EQL,_______,
+                                                _______,_______,_______,       KC_LGUI,KC_LCTL,S_GUI,
                                                                 _______,       KC_BSPC,
                                                                 _______,       _______
     ),
@@ -152,5 +154,41 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // only a single modifier from the previous key is repeated (e.g. Ctrl+Shift+T then Repeat produces Shift+T)
     mod_state = get_mods();
     oneshot_mod_state = get_oneshot_mods();
+    static bool is_t_held=false;
+    switch(keycode){
+        case KC_RIGHT:
+            is_t_held=record->event.pressed;
+            break;
+        case KC_N:{
+              static uint8_t registered_key = KC_NO;
+              if (record->event.pressed) {
+                  registered_key = (is_t_held) ? KC_TAB : KC_N;
+                  register_code(registered_key);
+              } else {
+                  unregister_code(registered_key);
+              }
+          }return false;
+
+        case KC_E:{
+              static uint8_t registered_key = KC_NO;
+              if (record->event.pressed) {
+                  registered_key = (is_t_held) ? KC_LCTL : KC_E;
+                  register_code(registered_key);
+              } else {
+                  unregister_code(registered_key);
+              }
+          }return false;
+
+        case KC_O:{
+              static uint8_t registered_key = KC_NO;
+              if (record->event.pressed) {
+                  registered_key = (is_t_held) ? KC_LSFT : KC_O;
+                  register_code(registered_key);
+              } else {
+                  unregister_code(registered_key);
+              }
+          }return false;
+
+    }
     return true;
 };
