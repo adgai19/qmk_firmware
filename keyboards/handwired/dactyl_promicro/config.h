@@ -37,7 +37,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
 // #define HOLD_ON_OTHER_KEY_PRESS
 #define RGBLED_NUM 12    // Number of LEDs
-#define TAPPING_TERM 300                        //
+#define TAPPING_TERM 200                        //
+// #define PERMISSIVE_HOLD
 /*
  * Feature disable options
  *  These options are also useful to firmware size reduction.
