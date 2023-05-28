@@ -1,3 +1,5 @@
+#include "keycodes.h"
+#include "quantum_keycodes.h"
 #include QMK_KEYBOARD_H
 
 
@@ -45,10 +47,12 @@ enum custom_keycodes {
 
 // combos
 const uint16_t PROGMEM test_combo1[] = {CTRL, SPC, COMBO_END};
-const uint16_t PROGMEM test_combo2[] = {KC_C, KC_D, COMBO_END};
+const uint16_t PROGMEM test_combo2[] = {CTRL, KC_N, COMBO_END};
+const uint16_t PROGMEM test_combo3[] = {CTRL, KC_E, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
-        COMBO(test_combo1, KC_SCLN),
-    COMBO(test_combo2, LCTL(KC_Z)), // keycodes with modifiers are possible too!
+    COMBO(test_combo1, KC_SCLN),
+    COMBO(test_combo2, LCTL(KC_TAB)), // keycodes with modifiers are possible too!
+    COMBO(test_combo3, LCTL(LSFT(KC_TAB))), // keycodes with modifiers are possible too!
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
