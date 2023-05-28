@@ -50,7 +50,7 @@ const uint16_t PROGMEM test_combo1[] = {CTRL, SPC, COMBO_END};
 const uint16_t PROGMEM test_combo2[] = {CTRL, KC_N, COMBO_END};
 const uint16_t PROGMEM test_combo3[] = {CTRL, KC_E, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
-    COMBO(test_combo1, KC_SCLN),
+    COMBO(test_combo1, KC_TAB),
     COMBO(test_combo2, LCTL(KC_TAB)), // keycodes with modifiers are possible too!
     COMBO(test_combo3, LCTL(LSFT(KC_TAB))), // keycodes with modifiers are possible too!
 };
