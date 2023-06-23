@@ -1,4 +1,5 @@
 #include "keycodes.h"
+#include "keymap_us.h"
 #include "quantum_keycodes.h"
 #include QMK_KEYBOARD_H
 
@@ -13,8 +14,10 @@
 
 #define ALT_SHFT LALT(KC_LSFT)
 #define ALT_MENU LALT_T(KC_MENU)
+
 #define ENT LSFT_T(KC_ENT)
 #define SPC LALT_T(KC_SPC)
+
 #define S_TAB S(KC_TAB)
 #define CS_TAB LCTL(LSFT(KC_TAB))
 #define C_TAB LCTL(KC_TAB)
@@ -47,12 +50,14 @@ enum custom_keycodes {
 
 // combos
 const uint16_t PROGMEM test_combo1[] = {CTRL, SPC, COMBO_END};
-const uint16_t PROGMEM test_combo2[] = {CTRL, KC_N, COMBO_END};
-const uint16_t PROGMEM test_combo3[] = {CTRL, KC_E, COMBO_END};
+const uint16_t PROGMEM test_combo2[] = {KC_BSPC, KC_N, COMBO_END};
+const uint16_t PROGMEM test_combo3[] = {KC_BSPC, KC_E, COMBO_END};
+const uint16_t PROGMEM test_combo4[] = {KC_BSPC, KC_O, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(test_combo1, KC_TAB),
     COMBO(test_combo2, LCTL(KC_TAB)), // keycodes with modifiers are possible too!
     COMBO(test_combo3, LCTL(LSFT(KC_TAB))), // keycodes with modifiers are possible too!
+    COMBO(test_combo4, LSFT(KC_TAB)), // keycodes with modifiers are possible too!
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -121,7 +126,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ├─────────┼──────┼───────┼─────┼───────┼───────┤                            ├─────┼─────┼─────┼────┼─────┼─────┤
 //    │         │  %   │   ^   │  {  │   }   │   ~   │                            │  &  │  1  │  2  │ 3  │  0  │  /  │
 //    ├─────────┼──────┼───────┼─────┼───────┼───────┘                            └─────┼─────┼─────┼────┼─────┼─────┤
-//    │ QK_BOOT │      │ C_TAB │ tab │ S_TAB │                                          │     │     │ -  │  .  │  0  │
+//    │ QK_BOOT │      │ C_TAB │ tab │ S_TAB │                                          │     │     │ -  │  _  │  0  │
 //    └─────────┴──────┴───────┴─────┴───────┼───────┬─────┐               ┌──────┬─────┼─────┴─────┴────┴─────┴─────┘
 //                                           │   =   │     │               │      │     │
 //                                           └───────┼─────┤               ├──────┼─────┘
@@ -134,23 +139,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_COLN , KC_EXLM , KC_AT   , KC_LBRC , KC_RBRC , KC_PIPE ,                                     KC_EQL  , KC_7    , KC_8    , KC_9    , KC_ASTR , KC_F12 ,
   KC_UNDS , KC_HASH , KC_DLR  , KC_LPRN , KC_RPRN , KC_GRV  ,                                     KC_BSLS , KC_4    , KC_5    , KC_6    , KC_PLUS , KC_UNDS,
   _______ , KC_PERC , KC_CIRC , KC_LCBR , KC_RCBR , KC_TILD ,                                     KC_AMPR , KC_1    , KC_2    , KC_3    , KC_0    , KC_SLSH,
-  QK_BOOT , _______ , C_TAB   , KC_TAB  , S_TAB   ,                                                         _______ , _______ , KC_MINS , KC_DOT  , KC_0   ,
+  QK_BOOT , _______ , C_TAB   , KC_TAB  , S_TAB   ,                                                         _______ , _______ , KC_MINS , KC_UNDS , KC_0   ,
                                                     KC_EQL  , _______ ,                 _______ , _______                                                  ,
                                                               _______ ,                 KC_LGUI                                                            ,
                                           KC_LCTL , S_GUI   , _______ ,                 KC_BSPC , _______ , _______
 ),
 
-//    ┌─────────┬─────┬──────┬──────┬──────┬─────┐                               ┌─────┬──────┬──────────┬───────┬──────┬──────┐
-//    │   SF2   │ SF7 │      │      │      │     │                               │     │      │          │       │      │      │
-//    ├─────────┼─────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼──────┼──────┤
-//    │         │     │ wh_u │ ms_u │ wh_d │     │                               │     │ tab  │    up    │ S_TAB │      │      │
-//    ├─────────┼─────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼──────┼──────┤
-//    │  SCROT  │     │ ms_l │ ms_d │ ms_r │     │                               │     │ left │   down   │  up   │ rght │      │
-//    ├─────────┼─────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼──────┼──────┤
-//    │         │     │ btn3 │ btn1 │ btn2 │     │                               │     │      │   mprv   │ mnxt  │      │      │
-//    ├─────────┼─────┼──────┼──────┼──────┼─────┘                               └─────┼──────┼──────────┼───────┼──────┼──────┤
-//    │ QK_BOOT │     │      │      │      │                                           │      │ www_back │ volu  │ vold │ mute │
-//    └─────────┴─────┴──────┴──────┴──────┼─────┬─────┐               ┌─────────┬─────┼──────┴──────────┴───────┴──────┴──────┘
+//    ┌─────────┬─────┬──────┬──────┬──────┬─────┐                               ┌─────┬──────┬──────────┬───────┬────────┬──────┐
+//    │   SF2   │ SF7 │      │      │      │     │                               │     │      │          │       │        │      │
+//    ├─────────┼─────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼────────┼──────┤
+//    │         │     │ wh_u │ ms_u │ wh_d │     │                               │     │ tab  │    up    │ S_TAB │ C_TAB  │      │
+//    ├─────────┼─────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼────────┼──────┤
+//    │  SCROT  │     │ ms_l │ ms_d │ ms_r │     │                               │     │ left │   down   │ rght  │ CS_TAB │      │
+//    ├─────────┼─────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼────────┼──────┤
+//    │         │     │ btn3 │ btn1 │ btn2 │     │                               │     │      │   mprv   │ mnxt  │        │      │
+//    ├─────────┼─────┼──────┼──────┼──────┼─────┘                               └─────┼──────┼──────────┼───────┼────────┼──────┤
+//    │ QK_BOOT │     │      │      │      │                                           │      │ www_back │ volu  │  vold  │ mute │
+//    └─────────┴─────┴──────┴──────┴──────┼─────┬─────┐               ┌─────────┬─────┼──────┴──────────┴───────┴────────┴──────┘
 //                                         │     │     │               │         │     │
 //                                         └─────┼─────┤               ├─────────┼─────┘
 //                                               │     │               │         │
@@ -158,11 +163,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //                                  │      │     │     │               │ L2_BSPC │     │      │
 //                                  └──────┴─────┴─────┘               └─────────┴─────┴──────┘
 [_RAISE] = LAYOUT_6x6(
-  SF2     , SF7     , _______ , _______ , _______ , _______ ,                                     _______ , _______ , _______ , _______ , _______  , _______,
-  _______ , _______ , KC_WH_U , KC_MS_U , KC_WH_D , _______ ,                                     _______ , KC_TAB  , KC_UP   , S_TAB   , _______  , _______,
-  SCROT   , _______ , KC_MS_L , KC_MS_D , KC_MS_R , _______ ,                                     _______ , KC_LEFT , KC_DOWN , KC_UP   , KC_RIGHT , _______,
-  _______ , _______ , KC_BTN3 , KC_BTN1 , KC_BTN2 , _______ ,                                     _______ , _______ , KC_MPRV , KC_MNXT , _______  , _______,
-  QK_BOOT , _______ , _______ , _______ , _______ ,                                                         _______ , KC_WBAK , KC_VOLU , KC_VOLD  , KC_MUTE,
+  SF2     , SF7     , _______ , _______ , _______ , _______ ,                                     _______ , _______ , _______ , _______  , _______ , _______,
+  _______ , _______ , KC_WH_U , KC_MS_U , KC_WH_D , _______ ,                                     _______ , KC_TAB  , KC_UP   , S_TAB    , C_TAB   , _______,
+  SCROT   , _______ , KC_MS_L , KC_MS_D , KC_MS_R , _______ ,                                     _______ , KC_LEFT , KC_DOWN , KC_RIGHT , CS_TAB  , _______,
+  _______ , _______ , KC_BTN3 , KC_BTN1 , KC_BTN2 , _______ ,                                     _______ , _______ , KC_MPRV , KC_MNXT  , _______ , _______,
+  QK_BOOT , _______ , _______ , _______ , _______ ,                                                         _______ , KC_WBAK , KC_VOLU  , KC_VOLD , KC_MUTE,
                                                     _______ , _______ ,                 _______ , _______                                                   ,
                                                               _______ ,                 _______                                                             ,
                                           _______ , _______ , _______ ,                 L2_BSPC , _______ , _______
@@ -225,41 +230,5 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // only a single modifier from the previous key is repeated (e.g. Ctrl+Shift+T then Repeat produces Shift+T)
     mod_state = get_mods();
     oneshot_mod_state = get_oneshot_mods();
-    static bool is_t_held=false;
-    switch(keycode){
-        case KC_BSPC:
-            is_t_held=record->event.pressed;
-            break;
-        case KC_N:{
-              static uint8_t registered_key = KC_NO;
-              if (record->event.pressed) {
-                  registered_key = (is_t_held) ? KC_TAB : KC_N;
-                  register_code(registered_key);
-              } else {
-                  unregister_code(registered_key);
-              }
-          }return false;
-
-        case KC_E:{
-              static uint8_t registered_key = KC_NO;
-              if (record->event.pressed) {
-                  registered_key = (is_t_held) ? KC_LCTL : KC_E;
-                  register_code(registered_key);
-              } else {
-                  unregister_code(registered_key);
-              }
-          }return false;
-
-        case KC_O:{
-              static uint8_t registered_key = KC_NO;
-              if (record->event.pressed) {
-                  registered_key = (is_t_held) ? KC_LSFT : KC_O;
-                  register_code(registered_key);
-              } else {
-                  unregister_code(registered_key);
-              }
-          }return false;
-
-    }
     return true;
 };
