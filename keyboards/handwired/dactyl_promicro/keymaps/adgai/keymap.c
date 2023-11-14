@@ -1,5 +1,7 @@
 
+#include "keycodes.h"
 #include "keymap_us.h"
+#include "process_combo.h"
 #include "quantum_keycodes.h"
 #include QMK_KEYBOARD_H
 
@@ -21,7 +23,7 @@
 #define S_TAB S(KC_TAB)
 #define CS_TAB LCTL(LSFT(KC_TAB))
 #define C_TAB LCTL(KC_TAB)
-#define CTRL LCTL_T(KC_ESC)
+#define CTRL LCTL_T(KC_TAB)
 #define GUI LGUI_T(KC_BSPC)
 #define L2_BSPC LCTL(KC_BSPC)
 #define S_GUI LSFT(KC_LGUI)
@@ -48,17 +50,40 @@ enum custom_keycodes {
     REPEAT = SAFE_RANGE,
 };
 
+enum combo_events {
+    TEST_COMBO1,
+    TEST_COMBO2,
+    TEST_COMBO3,
+    TEST_COMBO4,
+    TEST_COMBO5,
+};
 // combos
 const uint16_t PROGMEM test_combo1[] = {CTRL, SPC, COMBO_END};
-const uint16_t PROGMEM test_combo2[] = {KC_BSPC, KC_N, COMBO_END};
-const uint16_t PROGMEM test_combo3[] = {KC_BSPC, KC_E, COMBO_END};
-const uint16_t PROGMEM test_combo4[] = {KC_BSPC, KC_O, COMBO_END};
+const uint16_t PROGMEM test_combo2[] = {KC_T, KC_N, COMBO_END};
+const uint16_t PROGMEM test_combo3[] = {KC_T, KC_E, COMBO_END};
+const uint16_t PROGMEM test_combo4[] = {KC_T, KC_O, COMBO_END};
+const uint16_t PROGMEM test_combo5[] = {KC_T, KC_I, COMBO_END};
+const uint16_t PROGMEM test_combo6[] = {GUI, SPC, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(test_combo1, KC_TAB),
     COMBO(test_combo2, LCTL(KC_TAB)), // keycodes with modifiers are possible too!
     COMBO(test_combo3, LCTL(LSFT(KC_TAB))), // keycodes with modifiers are possible too!
     COMBO(test_combo4, LSFT(KC_TAB)), // keycodes with modifiers are possible too!
+    [TEST_COMBO5] = COMBO_ACTION(test_combo5),
+    COMBO(test_combo6, KC_DEL), // keycodes with modifiers are possible too!
 };
+void process_combo_event(uint16_t combo_index, bool pressed){
+  switch(combo_index) {
+    case TEST_COMBO5:
+      if (pressed) {
+        SEND_STRING(":=");
+      }
+      break;
+  }
+}
+
+// tap dance
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ┌──────┬───┬──────┬──────┬────────┬────────────┐                                           ┌─────────────┬────────────┬──────┬─────┬──────┬──────┐
