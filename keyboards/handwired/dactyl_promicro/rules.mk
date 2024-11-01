@@ -15,3 +15,5 @@ SPLIT_KEYBOARD = yes
 CAPS_WORD_ENABLE = yes
 # SRC += features/achordion.c
 COMBO_ENABLE = yes
+SRC += features/achordion.c
+REPEAT_KEY_ENABLE = yes

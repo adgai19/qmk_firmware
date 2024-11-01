@@ -1,4 +1,4 @@
-
+#include "features/achordion.h"
 #include "keycodes.h"
 #include "keymap_us.h"
 #include "process_combo.h"
@@ -48,6 +48,7 @@
 enum custom_keycodes {
     // it can be called REP if you want but "REPEAT" is clearer and still fits under the 8 char "limit"
     REPEAT = SAFE_RANGE,
+    MOUSEJIGGLERMACRO
 };
 
 enum combo_events {
@@ -101,7 +102,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //                                      └────────────┼─────────────┤               ├─────────────┼─────────────┘
 //                                                   │     GUI     │               │     ENT     │
 //                             ┌────────┬────────────┼─────────────┤               ├─────────────┼─────────────┬────────────┐
-//                             │ REPEAT │ TG(_RAISE) │    CTRL     │               │     SPC     │ TG(_QWERTY) │ TG(_LOWER) │
+//                             │ QK_REP │ TG(_RAISE) │    CTRL     │               │     SPC     │ TG(_QWERTY) │ TG(_LOWER) │
 //                             └────────┴────────────┴─────────────┘               └─────────────┴─────────────┴────────────┘
 [_WORKMAN] = LAYOUT_6x6(
   KC_GRV  , KC_1    , KC_2    , KC_3    , KC_4    , KC_5       ,                                             KC_ENT      , KC_SPC     , KC_BSPC , KC_ESC , KC_DEL  , KC_BSPC,
@@ -111,7 +112,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_EQL  , KC_QUOT , KC_BSPC , KC_LEFT , KC_RGHT ,                                                                        KC_SPC     , ENT     , KC_UP  , KC_DOWN , KC_LBRC,
                                                     KC_RBRC    , TG(_QWERTY) ,                 OSL(_LOWER) , KC_LSFT                                                        ,
                                                                  GUI         ,                 ENT                                                                          ,
-                                          REPEAT  , TG(_RAISE) , CTRL        ,                 SPC         , TG(_QWERTY) , TG(_LOWER)
+                                          QK_REP  , TG(_RAISE) , CTRL        ,                 SPC         , TG(_QWERTY) , TG(_LOWER)
 ),
 
 //    ┌──────┬───┬──────────┬──────┬────────┬────────────┐                                            ┌─────────────┬────────────┬─────┬────┬──────┬──────┐
@@ -170,32 +171,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                           KC_LCTL , S_GUI   , _______ ,                 KC_BSPC , _______ , _______
 ),
 
-//    ┌─────────┬─────┬──────┬──────┬──────┬─────┐                               ┌─────┬──────┬──────────┬───────┬────────┬──────┐
-//    │   SF2   │ SF7 │      │      │      │     │                               │     │      │          │       │        │      │
-//    ├─────────┼─────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼────────┼──────┤
-//    │         │     │ wh_u │ ms_u │ wh_d │     │                               │     │ tab  │    up    │ S_TAB │ C_TAB  │      │
-//    ├─────────┼─────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼────────┼──────┤
-//    │  SCROT  │     │ ms_l │ ms_d │ ms_r │     │                               │     │ left │   down   │ rght  │ CS_TAB │      │
-//    ├─────────┼─────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼────────┼──────┤
-//    │         │     │ btn3 │ btn1 │ btn2 │     │                               │     │      │   mprv   │ mnxt  │        │      │
-//    ├─────────┼─────┼──────┼──────┼──────┼─────┘                               └─────┼──────┼──────────┼───────┼────────┼──────┤
-//    │ QK_BOOT │     │      │      │      │                                           │      │ www_back │ volu  │  vold  │ mute │
-//    └─────────┴─────┴──────┴──────┴──────┼─────┬─────┐               ┌─────────┬─────┼──────┴──────────┴───────┴────────┴──────┘
-//                                         │     │     │               │         │     │
-//                                         └─────┼─────┤               ├─────────┼─────┘
-//                                               │     │               │         │
-//                                  ┌──────┬─────┼─────┤               ├─────────┼─────┬──────┐
-//                                  │      │     │     │               │ L2_BSPC │     │      │
-//                                  └──────┴─────┴─────┘               └─────────┴─────┴──────┘
+//    ┌─────────┬───────────────────┬──────┬──────┬──────┬─────┐                               ┌─────┬──────┬──────────┬───────┬────────┬──────┐
+//    │   SF2   │        SF7        │      │      │      │     │                               │     │      │          │       │        │      │
+//    ├─────────┼───────────────────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼────────┼──────┤
+//    │         │                   │ wh_u │ ms_u │ wh_d │     │                               │     │ tab  │    up    │ S_TAB │ C_TAB  │      │
+//    ├─────────┼───────────────────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼────────┼──────┤
+//    │  SCROT  │ MOUSEJIGGLERMACRO │ ms_l │ ms_d │ ms_r │     │                               │     │ left │   down   │ rght  │ CS_TAB │      │
+//    ├─────────┼───────────────────┼──────┼──────┼──────┼─────┤                               ├─────┼──────┼──────────┼───────┼────────┼──────┤
+//    │         │                   │ btn3 │ btn1 │ btn2 │     │                               │     │      │   mprv   │ mnxt  │        │      │
+//    ├─────────┼───────────────────┼──────┼──────┼──────┼─────┘                               └─────┼──────┼──────────┼───────┼────────┼──────┤
+//    │ QK_BOOT │                   │      │      │      │                                           │      │ www_back │ volu  │  vold  │ mute │
+//    └─────────┴───────────────────┴──────┴──────┴──────┼─────┬─────┐               ┌─────────┬─────┼──────┴──────────┴───────┴────────┴──────┘
+//                                                       │     │     │               │         │     │
+//                                                       └─────┼─────┤               ├─────────┼─────┘
+//                                                             │     │               │         │
+//                                                ┌──────┬─────┼─────┤               ├─────────┼─────┬──────┐
+//                                                │      │     │     │               │ L2_BSPC │     │      │
+//                                                └──────┴─────┴─────┘               └─────────┴─────┴──────┘
 [_RAISE] = LAYOUT_6x6(
-  SF2     , SF7     , _______ , _______ , _______ , _______ ,                                     _______ , _______ , _______ , _______  , _______ , _______,
-  _______ , _______ , KC_WH_U , KC_MS_U , KC_WH_D , _______ ,                                     _______ , KC_TAB  , KC_UP   , S_TAB    , C_TAB   , _______,
-  SCROT   , _______ , KC_MS_L , KC_MS_D , KC_MS_R , _______ ,                                     _______ , KC_LEFT , KC_DOWN , KC_RIGHT , CS_TAB  , _______,
-  _______ , _______ , KC_BTN3 , KC_BTN1 , KC_BTN2 , _______ ,                                     _______ , _______ , KC_MPRV , KC_MNXT  , _______ , _______,
-  QK_BOOT , _______ , _______ , _______ , _______ ,                                                         _______ , KC_WBAK , KC_VOLU  , KC_VOLD , KC_MUTE,
-                                                    _______ , _______ ,                 _______ , _______                                                   ,
-                                                              _______ ,                 _______                                                             ,
-                                          _______ , _______ , _______ ,                 L2_BSPC , _______ , _______
+  SF2     , SF7               , _______ , _______ , _______ , _______ ,                                     _______ , _______ , _______ , _______  , _______ , _______,
+  _______ , _______           , KC_WH_U , KC_MS_U , KC_WH_D , _______ ,                                     _______ , KC_TAB  , KC_UP   , S_TAB    , C_TAB   , _______,
+  SCROT   , MOUSEJIGGLERMACRO , KC_MS_L , KC_MS_D , KC_MS_R , _______ ,                                     _______ , KC_LEFT , KC_DOWN , KC_RIGHT , CS_TAB  , _______,
+  _______ , _______           , KC_BTN3 , KC_BTN1 , KC_BTN2 , _______ ,                                     _______ , _______ , KC_MPRV , KC_MNXT  , _______ , _______,
+  QK_BOOT , _______           , _______ , _______ , _______ ,                                                         _______ , KC_WBAK , KC_VOLU  , KC_VOLD , KC_MUTE,
+                                                              _______ , _______ ,                 _______ , _______                                                   ,
+                                                                        _______ ,                 _______                                                             ,
+                                                    _______ , _______ , _______ ,                 L2_BSPC , _______ , _______
 )
 };
 
@@ -209,51 +210,76 @@ uint8_t last_modifier = 0;
 // representation of active modifiers.
 uint8_t mod_state;
 uint8_t oneshot_mod_state;
+bool mouse_jiggle_mode = false;
 
-void process_repeat_key(uint16_t keycode, const keyrecord_t *record) {
-    if (keycode != REPEAT) {
-        // Early return when holding down a pure layer key
-        // to retain modifiers
-        switch (keycode) {
-            case QK_DEF_LAYER ... QK_DEF_LAYER_MAX:
-            case QK_MOMENTARY ... QK_MOMENTARY_MAX:
-            case QK_LAYER_MOD ... QK_LAYER_MOD_MAX:
-            case QK_ONE_SHOT_LAYER ... QK_ONE_SHOT_LAYER_MAX:
-            case QK_TOGGLE_LAYER ... QK_TOGGLE_LAYER_MAX:
-            case QK_TO ... QK_TO_MAX:
-            case QK_LAYER_TAP_TOGGLE ... QK_LAYER_TAP_TOGGLE_MAX:
-                return;
-        }
-        last_modifier = oneshot_mod_state > mod_state ? oneshot_mod_state : mod_state;
-        switch (keycode) {
-            case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
-            case QK_MOD_TAP ... QK_MOD_TAP_MAX:
-                if (record->event.pressed) {
-                    last_keycode = GET_TAP_KC(keycode);
-                }
-                break;
-            default:
-                if (record->event.pressed) {
-                    last_keycode = keycode;
-                }
-                break;
-        }
-    } else { // keycode == REPEAT
-        if (record->event.pressed) {
-            register_mods(last_modifier);
-            register_code16(last_keycode);
-        } else {
-            unregister_code16(last_keycode);
-            unregister_mods(last_modifier);
-        }
-    }
+// void process_repeat_key(uint16_t keycode, const keyrecord_t *record) {
+//     // if (keycode != REPEAT) {
+//     //     // Early return when holding down a pure layer key
+//     //     // to retain modifiers
+//     //     switch (keycode) {
+//     //         case QK_DEF_LAYER ... QK_DEF_LAYER_MAX:
+//     //         case QK_MOMENTARY ... QK_MOMENTARY_MAX:
+//     //         case QK_LAYER_MOD ... QK_LAYER_MOD_MAX:
+//     //         case QK_ONE_SHOT_LAYER ... QK_ONE_SHOT_LAYER_MAX:
+//     //         case QK_TOGGLE_LAYER ... QK_TOGGLE_LAYER_MAX:
+//     //         case QK_TO ... QK_TO_MAX:
+//     //         case QK_LAYER_TAP_TOGGLE ... QK_LAYER_TAP_TOGGLE_MAX:
+//     //             return;
+//     //     }
+//     //     last_modifier = oneshot_mod_state > mod_state ? oneshot_mod_state : mod_state;
+//     //     switch (keycode) {
+//     //         case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
+//     //         case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+//     //             if (record->event.pressed) {
+//     //                 last_keycode = GET_TAP_KC(keycode);
+//     //             }
+//     //             break;
+//     //         default:
+//     //             if (record->event.pressed) {
+//     //                 last_keycode = keycode;
+//     //             }
+//     //             break;
+//     //     }
+//     // }else if(keycode==MOUSEJIGGLERMACRO){
+//     //   if (record->event.pressed) {
+//     //     if (mouse_jiggle_mode){
+//     //         SEND_STRING(SS_DELAY(15));
+//     //         mouse_jiggle_mode = false;
+//     //     } else {
+//     //         SEND_STRING(SS_DELAY(15));
+//     //         mouse_jiggle_mode = true;
+//     //     }
+//     //   } else {
+//     //   }
+//     // } else { // keycode == REPEAT
+//     //     if (record->event.pressed) {
+//     //         register_mods(last_modifier);
+//     //         register_code16(last_keycode);
+//     //     } else {
+//     //         unregister_code16(last_keycode);
+//     //         unregister_mods(last_modifier);
+//     //     }
+//     // }
+// }
+void matrix_scan_user(void) {
+  // achordion_task();
+  if (mouse_jiggle_mode) {
+    SEND_STRING(SS_DELAY(10));
+    tap_code(KC_MS_UP);
+    tap_code(KC_MS_DOWN);
+    SEND_STRING(SS_DELAY(30));
+    tap_code(KC_MS_LEFT);
+    tap_code(KC_MS_RIGHT);
+  } else {
+  }
 }
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    process_repeat_key(keycode, record);
+  // if (!process_achordion(keycode, record)) { return false; }
+    // process_repeat_key(keycode, record);
     // It's important to update the mod variables *after* calling process_repeat_key, or else
     // only a single modifier from the previous key is repeated (e.g. Ctrl+Shift+T then Repeat produces Shift+T)
-    mod_state = get_mods();
-    oneshot_mod_state = get_oneshot_mods();
+    // mod_state = get_mods();
+    // oneshot_mod_state = get_oneshot_mods();
+
     return true;
 };
